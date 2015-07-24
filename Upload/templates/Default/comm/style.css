@@ -1,0 +1,70 @@
+.lastcomm {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: normal 14px/20px Arial, sans-serif;
+}
+.lastcomm a {
+  text-decoration: none;
+}
+.lastcomm a span {
+  color: #676767;
+}
+.lastcomm li {
+  position: relative;
+  border-bottom: solid 1px #ccc;
+  cursor: pointer;
+  padding: 5px 15px;
+}
+.lastcomm li .lcomm-user {
+  color: #b270ce;
+}
+.lastcomm li .lcomm-date {
+  color: #666;
+}
+.lastcomm li .lcomm-hidden {
+  position: absolute;
+  top: -10px;
+  left: 100%;
+  width: 450px;
+  display: none;
+  padding: 10px 14px;
+  font-weight: normal;
+  text-shadow: none;
+  background: #fff;
+  border: solid 2px #398dd8;
+  z-index: 150;
+  color: #444;
+}
+.lastcomm li .lcomm-hidden img {
+  max-width: 450px;
+}
+.lastcomm li .lcomm-hidden .lcomm-user-foto {
+  max-width: 44px;
+  background: #fff;
+  display: block;
+  margin: 4px 10px 10px 0;
+  overflow: hidden;
+  float: left;
+}
+.lastcomm li .lcomm-hidden .lcomm-text {
+  overflow: hidden;
+}
+.lastcomm li:hover {
+  background: #398dd8;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.lastcomm li:hover .lcomm-hidden {
+  display: block;
+}
+.lastcomm li:hover a,
+.lastcomm li:hover .lcomm-date,
+.lastcomm li:hover .lcomm-user,
+.lastcomm li:hover a span {
+  color: #fff;
+}
+.right-side .lastcomm .lcomm-hidden {
+  left: auto;
+  right: 100%;
+}

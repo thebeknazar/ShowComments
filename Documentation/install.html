@@ -1,0 +1,107 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Установка модуля ShowComments</title>
+	<style>
+	html, body { font: 13px/18px Arial, Helvetica, sans-serif; color: #333; background: #F1F1F1; margin: 0; padding: 0 }
+	.wrapper {
+		width: 800px;
+		overflow: hidden;
+		margin: 5% auto 0;  
+		-webkit-box-shadow: rgba( 0, 0, 0, 0.3 ) 0 1px 3px; 
+		-moz-box-shadow: rgba( 0, 0, 0, 0.3 ) 0 1px 3px; 
+		box-shadow: rgba( 0, 0, 0, 0.3 ) 0 1px 3px; 
+		border-color: #E5E5E5 #DBDBDB #D2D2D2; 
+		border-radius: 4px; 
+		background: #FFF; 
+		padding: 30px;
+		position: relative;
+	}
+	.wrapper .cms {
+		position: absolute;
+		top: 25px;
+		font-size: 18px;
+		right: 25px;
+		padding: 5px 10px;
+		color: #787878;
+		background-color: #ebebeb;
+		border-radius: 3px;
+	}
+	.wrapper .cms b {
+		color: #328ECD;
+	}
+	.wrapper .date {
+		position: absolute;
+		top: 25px;
+		font-size: 13px;
+		left: 25px;
+		padding: 5px 10px;
+		font-style: italic;
+		color: #787878;
+		background-color: #ebebeb;
+		border-radius: 3px;
+	}
+	.wrapper .date span {
+		color: #328ECD;
+	}
+	.wrapper .title { font-size: 28pt; font-weight: 700; line-height: 40pt }
+	.wrapper .result { margin-top: 10px }
+	.wrapper .explay { margin-top: 15px }
+	.wrapper .explay a { text-decoration: none; color: #787878 }
+	ol li {
+		margin: 5px 0;
+	}
+	ol li textarea {
+		width: 100%;
+		background-color: #ebebeb;
+		outline: none;
+		border: 1px solid #ccc;
+		height: auto;
+		padding: 5px;
+	}
+	ol li textarea.min {
+		min-height: 140px;
+	}
+	ol li textarea.big {
+		min-height: 320px;
+	}
+	img {
+	max-width: 750px;
+	}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="title" style="text-align:center;"><br>ShowComments</div>
+		<div class="cms">DLE <b>9.x - 10.x</b></div>
+		<div class="date">от <span>24.07.2015</span></div>
+		<ol>
+			<li>Скопировать содержимое папки <b>Upload</b> в корень сайта, предварительно поменять название шаблона сайта на своё.</li>
+			<li>Открыть main.tpl перед закрывающим тегом HEAD прописать : <textarea><link media="screen" href="{THEME}/comm/style.css" type="text/css" rel="stylesheet" /></textarea> </li>
+			<li>В нужное месте вставить : <textarea>{include file="engine/modules/comm.php"}</textarea> </li>
+			<li>В comm.tpl файле доступны следующие теги :<br>
+			1) <b>{text}</b> - текст комментария <br>
+			2) <b>[user_url] * текст * [/user_url]</b> - обернет текст внутри в ссылку на профиль автора комментария <br>
+			3) <b>[color] * текст * [/color]</b> - обернет текст внутри в цвет группы к которой относится автор комментария <br>
+			4) <b>{rating}</b> - выведет рейтинг новости (в числе) <br>
+			5) <b>{views}</b> - выведет кол-во просмотров новости <br>
+			6) <b>{user_url}</b> - ссылка на автора <br>
+			7) <b>{user_name}</b> - просто ник автора <br>
+			8) <b>{title}</b> - укороченный заголовок новости <br>
+			9) <b>{long_title}</b> - полный заголовок новости <br>
+			10)<b>{author}</b> - автор с ссылкой на профиль ( с модальным окном )<br>
+			11)<b>{full_link}</b> - ссылка на комментарий ( сразу в новость )<br>
+			12)<b>{comm_num}</b> - коллво комментариев <br>
+			13)<b>{date}</b> - Дата (возможно работать как и с датой в краткой новости) <br>
+			14)<b>{foto}</b> - ссылка на фото юзера <br>
+			15)<b>[not-comm] любой текст [/not-comm]</b> - выводит любой текст заключеный в эти теги, если комментариев не найдено <br>
+			16)<b>[comm] любой текст [/comm]</b> - выводит любой текст заключеный в эти теги, если комментарии найдены <br>
+			17)<b>{error}</b> - выводит текст о том что комментариев нету <br>
+			</li>
+		</ol>
+		Более подробней читайте здесь : <a href="http://igameer.ru/port/49-showcomments.html">http://igameer.ru/port/49-showcomments.html</a>
+		<div class="result"><b>Автор :</b> Gameer (от 24.07.2015) <a href="http://igameer.ru/port/49-showcomments.html">http://igameer.ru/</a></div>
+	</div>
+</body>
+</html>
