@@ -46,7 +46,7 @@ if(!class_exists('Comments'))
 			$allow_cache = ($this->config['version_id'] >= '10.2') ? $this->config['allow_cache'] == '1' : $this->config['allow_cache'] == "yes";
 			$allow_multi_category = ($this->config['version_id'] >= '10.2') ? $this->config['allow_multi_category'] == '1' : $this->config['allow_multi_category'] == "yes";
 			
-			if ($this->config['version_id'] >= '10.5' AND $this->comm_cfg['rating_comm']) // рейтинг комментариев только для DLE 10.5 и выще
+			if ($this->config['version_id'] >= '10.4' AND $this->comm_cfg['rating_comm']) // рейтинг комментариев только для DLE 10.4 и выще
 				$where[] = "c.rating > {$this->comm_cfg[rating_comm]}";
 			
 			// работа с категориями
