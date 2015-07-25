@@ -390,28 +390,28 @@ if(!class_exists('Comments'))
 }
 
 $CommCfg = array(
-	'max_comm' => !empty($max_comm) ? $max_comm : 10, // максимальное кол-во выводимых комментариев
-	'max_text' => !empty($max_text) ? $max_text : 500, // максимальное кол-во символов при выводе комментария
-	'max_title' => !empty($max_title) ? $max_title : 25, // максимальное кол-во символов при выводе заголовка новости
-	'stop_category' => !empty($stop_category) ? $stop_category : false, // из каких категорий не выводить
-	'from_category' => !empty($from_category) ? $from_category : false, // из каких категорий выводить
-	'stop_id' => !empty($stop_id) ? $stop_id : false, // исключаем комментарии по id новостей
-	'from_id' => !empty($from_id) ? $from_id : false, // выводить комментарии только из этих новостей
-	'only_avatar' => !empty($avatar) ? $avatar : false, // выводить только комментарии авторов которые имеют загруженный аватар
-	'only_news' => !empty($news) ? $news : false, // выводить только комментарии авторов которые имеют новости
-	'news_user' => !empty($news_user) ? $news_user : false, // выводить комментарии авторов которые имеют кол-во новостей больше чем
-	'comm' => !empty($comm) ? $comm : false, // выводить комментарии авторов которые имеют кол-во комментариев больше чем
-	'ncomm' => !empty($ncomm) ? $ncomm : false, // выводить комментарии только из тех новостей которые имеют кол-во комментариев больше чем
-	'fixed' => !empty($fixed) ? $fixed : false, // выводить только комментарии из тех новостей которые зафиксированы
-	'tags' => !empty($tags) ? $tags : false, // выводить только комментарии из тех новостей которые имеют теги
-	'news_read' => !empty($read) ? $read : false, // выводить только комментарии из тех новостей которые имеют просмотров больше чем
-	'rating_news' => !empty($nrating) ? $nrating : false, // выводить только комментарии из тех новостей которые имеют рейтинг больше чем
-	'only_fav' => !empty($fav) ? $fav : false, // выводить только комментарии авторов которые имеют закладки
-	'only_fullname' => !empty($fullname) ? $fullname : false, // выводить только комментарии авторов которые заполнили полное имя
-	'only_land' => !empty($land) ? $land : false, // выводить только комментарии авторов которые заполнили место жительства
-	'rating_comm' => !empty($rating) ? $rating : false, // выводить только комментарии у которых рейтинг больше чем
-	'news_xfield' => !empty($nxf) ? $nxf : false, // взаемодействие с дополнительными полями новостей
-	'user_xfield' => !empty($uxf) ? $uxf : false, // взаемодействие с дополнительными полями пользователей
+	'max_comm' => is_numeric($max_comm) ? (int)$max_comm : 10, // максимальное кол-во выводимых комментариев
+	'max_text' => is_numeric($max_text) ? (int)$max_text : 500, // максимальное кол-во символов при выводе комментария
+	'max_title' => is_numeric($max_title) ? (int)$max_title : 25, // максимальное кол-во символов при выводе заголовка новости
+	'stop_category' => !empty($stop_category) ? strip_tags(stripslashes($stop_category)) : false, // из каких категорий не выводить
+	'from_category' => !empty($from_category) ? strip_tags(stripslashes($from_category)) : false, // из каких категорий выводить
+	'stop_id' => !empty($stop_id) ? strip_tags(stripslashes($stop_id)) : false, // исключаем комментарии по id новостей
+	'from_id' => !empty($from_id) ? strip_tags(stripslashes($from_id)) : false, // выводить комментарии только из этих новостей
+	'only_avatar' => is_numeric($avatar) ? (int)$avatar : false, // выводить только комментарии авторов которые имеют загруженный аватар
+	'only_news' => is_numeric($news) ? (int)$news : false, // выводить только комментарии авторов которые имеют новости
+	'news_user' => is_numeric($news_user) ? (int)$news_user : false, // выводить комментарии авторов которые имеют кол-во новостей больше чем
+	'comm' => is_numeric($comm) ? (int)$comm : false, // выводить комментарии авторов которые имеют кол-во комментариев больше чем
+	'ncomm' => is_numeric($ncomm) ? (int)$ncomm : false, // выводить комментарии только из тех новостей которые имеют кол-во комментариев больше чем
+	'fixed' => is_numeric($fixed) ? (int)$fixed : false, // выводить только комментарии из тех новостей которые зафиксированы
+	'tags' => !empty($tags) ? strip_tags(stripslashes($tags)) : false, // выводить только комментарии из тех новостей которые имеют теги
+	'news_read' => is_numeric($read) ? (int)$read : false, // выводить только комментарии из тех новостей которые имеют просмотров больше чем
+	'rating_news' => is_numeric($nrating) ? (int)$nrating : false, // выводить только комментарии из тех новостей которые имеют рейтинг больше чем
+	'only_fav' => is_numeric($fav) ? (int)$fav : false, // выводить только комментарии авторов которые имеют закладки
+	'only_fullname' => is_numeric($fullname) ? (int)$fullname : false, // выводить только комментарии авторов которые заполнили полное имя
+	'only_land' => is_numeric($land) ? (int)$land : false, // выводить только комментарии авторов которые заполнили место жительства
+	'rating_comm' => is_numeric($rating) ? (int)$rating : false, // выводить только комментарии у которых рейтинг больше чем
+	'news_xfield' => !empty($nxf) ? strip_tags(stripslashes($nxf)) : false, // взаемодействие с дополнительными полями новостей
+	'user_xfield' => !empty($uxf) ? strip_tags(stripslashes($uxf)) : false, // взаемодействие с дополнительными полями пользователей
 );
 
 $ShowComments = new Comments;
