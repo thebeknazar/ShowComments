@@ -313,12 +313,12 @@ if(!class_exists('Comments'))
 					}
 				}
 				
-				create_cache( "Comm_" . $Comm_hash, $Comm, $this->config['skin'], true ); //создаем кэш
-				
 				if ($this->group[$this->member['user_group']]['allow_hide'])
 					$Comm = preg_replace("'\[hide\](.*?)\[/hide\]'si", "\\1", $Comm);
 				else
 					$Comm = preg_replace("'\[hide\](.*?)\[/hide\]'si", "<div class=\"quote\"> Для вашей группы скрытый текст не виден </div>", $Comm);
+				
+				create_cache( "Comm_" . $Comm_hash, $Comm, $this->config['skin'], true ); //создаем кэш
 				
 				if ($is_change)
 					$this->config['allow_cache'] = false; //выключаем кэш принудительно (возвращаем назад)
