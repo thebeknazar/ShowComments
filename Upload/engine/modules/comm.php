@@ -117,7 +117,7 @@ if(!class_exists('Comments'))
 				$where[] = "u.comm_num > {$this->comm_cfg[comm]}";
 			
 			// префикс кэша
-			$Comm_hash = 	$this->comm_cfg['max_comm'] . 
+			$Comm_hash = 	md5($this->comm_cfg['max_comm'] . 
 							$this->comm_cfg['max_text'] . 
 							$this->comm_cfg['max_title'] . 
 							$this->comm_cfg['check_guest'] . 
@@ -131,7 +131,7 @@ if(!class_exists('Comments'))
 							$this->comm_cfg['comm'] . 
 							$this->comm_cfg['only_fav'] . 
 							$this->comm_cfg['only_fullname'] . 
-							$this->comm_cfg['only_land'];
+							$this->comm_cfg['only_land']);
 
 			$is_change = false;
 
@@ -144,7 +144,7 @@ if(!class_exists('Comments'))
 				$is_change = true;
 			}
 
-			$Comm = dle_cache( "Comm_" . $Comm_hash, $this->config['skin'], true); // подгружаем из кэша
+			$Comm = dle_cache( "Comm_", $this->config['skin'] . $Comm_hash); // подгружаем из кэша
 			if (!$Comm) // если кэша небыло или другая проблема
 			{
 				if(count($where) > 0)
@@ -318,7 +318,7 @@ if(!class_exists('Comments'))
 				else
 					$Comm = preg_replace("'\[hide\](.*?)\[/hide\]'si", "<div class=\"quote\"> Для вашей группы скрытый текст не виден </div>", $Comm);
 				
-				create_cache( "Comm_" . $Comm_hash, $Comm, $this->config['skin'], true ); //создаем кэш
+				create_cache("Comm_", $iComm, $this->config['skin'] . $Comm_hash); //создаем кэш
 				
 				if ($is_change)
 					$this->config['allow_cache'] = false; //выключаем кэш принудительно (возвращаем назад)
