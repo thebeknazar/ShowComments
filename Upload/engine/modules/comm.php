@@ -318,7 +318,7 @@ if(!class_exists('Comments'))
 				else
 					$Comm = preg_replace("'\[hide\](.*?)\[/hide\]'si", "<div class=\"quote\"> Для вашей группы скрытый текст не виден </div>", $Comm);
 				
-				create_cache("Comm_", $iComm, $this->config['skin'] . $Comm_hash); //создаем кэш
+				create_cache("Comm_", $Comm, $this->config['skin'] . $Comm_hash); //создаем кэш
 				
 				if ($is_change)
 					$this->config['allow_cache'] = false; //выключаем кэш принудительно (возвращаем назад)
