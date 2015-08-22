@@ -72,9 +72,9 @@ if(!class_exists('Comments'))
 			
 			// работа с новостями
 			if($this->comm_cfg['stop_id'])
-				$where[] = $this->Explode_NewsID($this->comm_cfg['stop_id']);
+				$where[] = $this->Explode_NewsID($this->comm_cfg['stop_id'], false);
 			if($this->comm_cfg['from_id'])
-				$where[] = $this->Explode_NewsID($this->comm_cfg['from_id']);
+				$where[] = $this->Explode_NewsID($this->comm_cfg['from_id'], true);
 			
 			if($this->comm_cfg['ncomm']) // выводим только с комментариями у новостей больше чем
 				$where[] = "p.comm_num > {$this->comm_cfg[ncomm]}";
@@ -344,7 +344,7 @@ if(!class_exists('Comments'))
 			unset($temp_array);
 		}
 		
-		private function Explode_NewsID($id) //работа с новостями
+		private function Explode_NewsID($id , $type) //работа с новостями
 		{
 			$temp_array = array();
 			$where_id = array();
@@ -354,20 +354,30 @@ if(!class_exists('Comments'))
 			foreach ($id as $value) {
 				if( count(explode('-', $value)) == 2 ) {
 					$value = explode('-', $value);
-					$where_id[] = "id >= '" . intval($value[0]) . "' AND id <= '".intval($value[1])."'";
+					if($type)
+						$where_id[] = "p.id >= '" . intval($value[0]) . "' AND p.id <= '".intval($value[1])."'";
+					else
+						$where_id[] = "(p.id < '" . intval($value[0]) . "' OR p.id > '".intval($value[1])."')";
 				} else $temp_array[] = intval($value);
 			}
 
 			if ( count($temp_array) )
-				$where_id[] = "id IN ('" . implode("','", $temp_array) . "')";
+				if($type)
+					$where_id[] = "p.id IN ('" . implode("','", $temp_array) . "')";
+				else
+					$where_id[] = "p.id NOT IN ('" . implode("','", $temp_array) . "')";
 
-			if ( count($where_id) ) { 
-				$custom_id = implode(' OR ', $where_id);
+			if ( count($where_id) ) {
+				if($type)
+					$custom_id = implode(' OR ', $where_id);
+				else
+					$custom_id = implode(' AND ', $where_id);
 				$id_news = $custom_id;
-			}
-			return $id_news;
+			}	
 			unset($temp_array);
 			unset($where_id);
+			return $id_news;
+
 		}
 		
 		private function Explode_xField($xf, $type) //работа с дополнительными полями
