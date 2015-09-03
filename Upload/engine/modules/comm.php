@@ -49,26 +49,32 @@ if(!class_exists('Comments'))
 			if ($this->config['version_id'] >= '10.4' AND $this->comm_cfg['rating_comm']) // рейтинг комментариев только для DLE 10.4 и выще
 				$where[] = "c.rating > {$this->comm_cfg[rating_comm]}";
 			
-			// работа с категориями
-			if( $allow_multi_category )
+			if( $allow_multi_category ) // работа с категориями
 			{
 				if($this->comm_cfg['stop_category'])
-					$where[] = "category NOT REGEXP '[[:<:]](" . $this->Explode_Category($this->comm_cfg['stop_category'], "multi") . ")[[:>:]]'";
+					$where[] = "category NOT REGEXP '[[:<:]](" . $this->Explode_Category($this->comm_cfg['stop_category'], true) . ")[[:>:]]'";
 				if($this->comm_cfg['from_category'])
-					$where[] = "category REGEXP '[[:<:]](" .  $this->Explode_Category($this->comm_cfg['from_category'], "multi") . ")[[:>:]]'";
+					$where[] = "category REGEXP '[[:<:]](" .  $this->Explode_Category($this->comm_cfg['from_category'], true) . ")[[:>:]]'";
 			}
 			else
 			{
 				if($this->comm_cfg['stop_category'])
-					$where[] = "category NOT IN ('" . $this->Explode_Category($this->comm_cfg['stop_category']) . "')";
+					$where[] = "category NOT IN ('" . $this->Explode_Category($this->comm_cfg['stop_category'], false) . "')";
 				if($this->comm_cfg['from_category'])
-					$where[] = "category IN ('" . $this->Explode_Category($this->comm_cfg['from_category']) . "')";
+					$where[] = "category IN ('" . $this->Explode_Category($this->comm_cfg['from_category'], false) . "')";
 			}
 			
 			if($this->comm_cfg['news_xfield']) // работа с доп полями новостей
 				$where[] = $this->Explode_xField($this->comm_cfg['news_xfield'], "p.xfields");
+				
 			if($this->comm_cfg['user_xfield']) // работа с доп полями пользователей
 				$where[] = $this->Explode_xField($this->comm_cfg['user_xfield'], "u.xfields");
+			
+			
+			if($this->comm_cfg['user']) // работа с пользователями
+				$where[] = $this->Explode_User($this->comm_cfg['user'], true);
+			if($this->comm_cfg['not_user'])
+				$where[] = $this->Explode_User($this->comm_cfg['not_user'], false);
 			
 			// работа с новостями
 			if($this->comm_cfg['stop_id'])
@@ -116,22 +122,7 @@ if(!class_exists('Comments'))
 			if($this->comm_cfg['comm']) // выводим только если комментариев больше чем
 				$where[] = "u.comm_num > {$this->comm_cfg[comm]}";
 			
-			// префикс кэша
-			$Comm_hash = 	md5($this->comm_cfg['max_comm'] . 
-							$this->comm_cfg['max_text'] . 
-							$this->comm_cfg['max_title'] . 
-							$this->comm_cfg['check_guest'] . 
-							$this->comm_cfg['stop_category'] . 
-							$this->comm_cfg['from_category'] . 
-							$this->comm_cfg['stop_id'] . 
-							$this->comm_cfg['from_id'] . 
-							$this->comm_cfg['only_avatar'] . 
-							$this->comm_cfg['only_news'] . 
-							$this->comm_cfg['news_user'] . 
-							$this->comm_cfg['comm'] . 
-							$this->comm_cfg['only_fav'] . 
-							$this->comm_cfg['only_fullname'] . 
-							$this->comm_cfg['only_land']);
+			$Comm_hash = md5(implode(',',$where)); // префикс кэша
 
 			$is_change = false;
 
@@ -144,7 +135,7 @@ if(!class_exists('Comments'))
 				$is_change = true;
 			}
 
-			$Comm = dle_cache( "Comm_", $this->config['skin'] . $Comm_hash); // подгружаем из кэша
+			$Comm = dle_cache( "news_Comm_", $this->config['skin'] . $Comm_hash); // подгружаем из кэша
 			if (!$Comm) // если кэша небыло или другая проблема
 			{
 				if(count($where) > 0)
@@ -318,7 +309,7 @@ if(!class_exists('Comments'))
 				else
 					$Comm = preg_replace("'\[hide\](.*?)\[/hide\]'si", "<div class=\"quote\"> Для вашей группы скрытый текст не виден </div>", $Comm);
 				
-				create_cache("Comm_", $Comm, $this->config['skin'] . $Comm_hash); //создаем кэш
+				create_cache("news_Comm_", $Comm, $this->config['skin'] . $Comm_hash); //создаем кэш
 				
 				if ($is_change)
 					$this->config['allow_cache'] = false; //выключаем кэш принудительно (возвращаем назад)
@@ -335,7 +326,7 @@ if(!class_exists('Comments'))
 				if( count(explode('-', $value)) == 2 ) $temp_array[] = get_mass_cats($value);
 				else $temp_array[] = intval($value);
 			}
-			if($type == "multi")
+			if($type)
 				$temp_array = implode("|", $temp_array);
 			else
 				$temp_array = implode(",", $temp_array);
@@ -377,7 +368,16 @@ if(!class_exists('Comments'))
 			unset($temp_array);
 			unset($where_id);
 			return $id_news;
-
+		}
+		
+		private function Explode_User($user, $type) //работа с пользователями
+		{
+			if(!$type)
+				$user = "c.author NOT IN ('" . $user . "')";
+			else
+				$user = "c.author IN ('" . $user . "')";
+			
+			return $user;
 		}
 		
 		private function Explode_xField($xf, $type) //работа с дополнительными полями
@@ -391,10 +391,9 @@ if(!class_exists('Comments'))
 				$xf_arr[] = "SUBSTRING_INDEX( SUBSTRING_INDEX( {$type},  '{$array[$i][0]}|', -1 ) ,  '||', 1 ) LIKE '%{$array[$i][1]}%'";
 
 			$xf_arr = $type . '!= "" AND ' . implode(' AND ', $xf_arr);
-
-			return $xf_arr;
+			
 			unset($array);
-			unset($xf_arr);
+			return $xf_arr;
 		}
 	}
 }
@@ -422,6 +421,8 @@ $CommCfg = array(
 	'rating_comm' => is_numeric($rating) ? (int)$rating : false, // выводить только комментарии у которых рейтинг больше чем
 	'news_xfield' => !empty($nxf) ? strip_tags(stripslashes($nxf)) : false, // взаемодействие с дополнительными полями новостей
 	'user_xfield' => !empty($uxf) ? strip_tags(stripslashes($uxf)) : false, // взаемодействие с дополнительными полями пользователей
+	'user' => !empty($user) ? strip_tags(stripslashes($user)) : false, // вывод комментариев только этого/этих пользователя(ей)
+	'not_user' => !empty($not_user) ? strip_tags(stripslashes($not_user)) : false, // вывод комментариев кроме этого/этих пользователя(ей)
 );
 
 $ShowComments = new Comments;
