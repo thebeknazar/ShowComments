@@ -373,9 +373,9 @@ if(!class_exists('Comments'))
 		private function Explode_User($user, $type) //работа с пользователями
 		{
 			if(!$type)
-				$user = "c.author NOT IN ('" . $user . "')";
+				$user = "c.autor NOT IN ('" . $user . "')";
 			else
-				$user = "c.author IN ('" . $user . "')";
+				$user = "c.autor IN ('" . $user . "')";
 			
 			return $user;
 		}
