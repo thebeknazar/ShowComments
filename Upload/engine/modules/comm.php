@@ -431,7 +431,7 @@ if(!class_exists('Comments'))
 					$Comm = preg_replace("'\[hide\](.*?)\[/hide\]'si", "<div class=\"quote\"> Для вашей группы скрытый текст не виден </div>", $Comm);
 				
 				$Comm = preg_replace( "#<!--dle_uppod_begin:(.+?)-->(.+?)<!--dle_uppod_end-->#is", '[uppod=\\1]', $Comm );
-				$Comm = preg_replace( "#\[uppod=([^\]]+)\]#ies", "build_uppod('\\1')", $Comm );
+				$Comm = preg_replace_callback( "#\[uppod=([^\]]+)\]#ies", "build_uppod('\\1')", $Comm );
 				
 				create_cache("news_Comm_", $Comm, $this->config['skin'] . $Comm_hash); //создаем кэш
 				
