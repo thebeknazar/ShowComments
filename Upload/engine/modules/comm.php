@@ -175,7 +175,7 @@ if(!class_exists('Comments'))
 				$is_change = true;
 			}
 
-			$Comm = dle_cache( "news_Comm_", $this->config['skin'] . $Comm_hash); // подгружаем из кэша
+			$Comm = dle_cache( "news_Comm_" . $this->comm_cfg['temp'], $this->config['skin'] . $Comm_hash); // подгружаем из кэша
 			if (!$Comm) // если кэша небыло или другая проблема
 			{
 				if(count($where) > 0)
@@ -433,7 +433,7 @@ if(!class_exists('Comments'))
 				$Comm = preg_replace( "#<!--dle_uppod_begin:(.+?)-->(.+?)<!--dle_uppod_end-->#is", '[uppod=\\1]', $Comm );
 				$Comm = preg_replace_callback( "#\[uppod=([^\]]+)\]#ies", "build_uppod('\\1')", $Comm );
 				
-				create_cache("news_Comm_", $Comm, $this->config['skin'] . $Comm_hash); //создаем кэш
+				create_cache("news_Comm_" . $this->comm_cfg['temp'], $Comm, $this->config['skin'] . $Comm_hash); //создаем кэш
 				
 				if ($is_change)
 					$this->config['allow_cache'] = false; //выключаем кэш принудительно (возвращаем назад)
@@ -567,7 +567,7 @@ $CommCfg = array(
 	'date_comm' => !empty($date_comm) ? strip_tags(stripslashes($date_comm)) : false, 	// вывод комментариев за определенную дату комментариев
 	'day_news' => !empty($day_news) ? intval($day_news) : false, 					// вывод комментариев за определенные дни новостей
 	'day_comm' => !empty($day_comm) ? intval($day_comm) : false, 					// вывод комментариев за определенные дни комментариев
-	'temp' => !empty($temp) ? intval($temp) : false, 								// задать шаблон для вывода комментариев
+	'temp' => !empty($temp) ? trim($temp) : false, 								// задать шаблон для вывода комментариев
 );
 
 $ShowComments = new Comments;
